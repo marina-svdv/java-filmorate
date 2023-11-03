@@ -188,7 +188,6 @@ public class UserControllerTest {
                 .POST(HttpRequest.BodyPublishers.ofString(validUser))
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
         HttpRequest request1 = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .GET()
