@@ -17,7 +17,7 @@ public class Film {
     private int duration;
     private int rate;
 
-    {if (id == 0) {
+    { if (id == 0) {
             id = COUNTER++;
         }
     }
