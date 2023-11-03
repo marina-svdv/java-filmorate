@@ -1,17 +1,10 @@
-# Compiled class files
-*.class
-
-# Log files
-*.log
-
-# Jar files
-*.jar
-
-# Maven generated files
+HELP.md
 target/
-!/.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Spring Tool Suite generated files
+### STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -20,36 +13,21 @@ target/
 .springBeans
 .sts4-cache
 
-# IntelliJ IDEA generated files
+### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
 
-# NetBeans generated files
+### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# VS Code generated files
+### VS Code ###
 .vscode/
-
-# Gradle generated files
-/build/
-/out/
-!/gradle/wrapper/gradle-wrapper.jar
-
-# Other common binary files
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# OS generated files
-.DS_Store
-Thumbs.db
