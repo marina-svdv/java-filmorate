@@ -38,7 +38,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
@@ -56,7 +56,7 @@ public class FilmControllerTest {
                 + "  \"duration\": -120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(invalidFilm))
                 .build();
@@ -75,14 +75,14 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest initialRequest = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
         httpClient.send(initialRequest, HttpResponse.BodyHandlers.ofString());
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
@@ -100,7 +100,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
@@ -114,7 +114,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 110\n"
                 + "}";
         HttpRequest request1 = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(updatedFilm))
                 .build();
@@ -133,7 +133,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(nonExistingFilm))
                 .build();
@@ -145,7 +145,7 @@ public class FilmControllerTest {
     @Test
     public void testCreateFilmWithEmptyBody() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
@@ -163,7 +163,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(filmWithInvalidName))
                 .build();
@@ -175,7 +175,7 @@ public class FilmControllerTest {
     @Test
     public void testGetAllFilms() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/filmorate/films"))
+                .uri(new URI(baseUrl + "/films"))
                 .GET()
                 .build();
 
