@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 public class Film {
@@ -15,7 +16,6 @@ public class Film {
     private LocalDate releaseDate;
     private int duration;
     private int rate;
-
     {
         if (id == 0) {
             id = COUNTER++;
