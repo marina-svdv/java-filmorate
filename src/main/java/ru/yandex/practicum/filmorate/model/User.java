@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 @Data
-@NoArgsConstructor
 public class User {
     private static int COUNTER = 1;
 
@@ -15,7 +14,7 @@ public class User {
     private String name;
     LocalDate birthday;
 
-    {
+    public User() {
         if (id == 0) {
             id = COUNTER++;
         }
