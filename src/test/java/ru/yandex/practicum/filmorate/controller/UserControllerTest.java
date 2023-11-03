@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,14 +17,12 @@ public class UserControllerTest {
 
     @Test
     public void testCreateValidUser() throws Exception {
-        String validUser = """
-                {
-                    "login": "testLogin",
-                    "name": "Test User",
-                    "email": "test@email.com",
-                    "birthday": "1977-07-07"
-                }
-                """;
+        String validUser = "{\n"
+                + "  \"login\": \"testLogin\",\n"
+                + "  \"name\": \"Test User\",\n"
+                + "  \"email\": \"test@email.com\",\n"
+                + "  \"birthday\": \"1977-07-07\"\n"
+                + "}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -39,11 +35,12 @@ public class UserControllerTest {
 
     @Test
     public void testCreateInvalidUser() throws Exception {
-        String invalidUser = """
-                {
-                        
-                }
-                """;
+        String invalidUser = "{\n"
+                + "  \"login\": \"\",\n"
+                + "  \"name\": \"\",\n"
+                + "  \"email\": \"\",\n"
+                + "  \"birthday\": \"\"\n"
+                + "}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -56,15 +53,13 @@ public class UserControllerTest {
 
     @Test
     public void testCreateUserWithExistingId() throws Exception {
-        String validUser = """
-                {
-                    "login": "testLogin",
-                    "name": "Test User",
-                    "id": 1,
-                    "email": "test@email.com",
-                    "birthday": "1977-07-07"
-                }
-                """;
+        String validUser = "{\n"
+                + "  \"login\": \"testLogin\",\n"
+                + "  \"name\": \"Test User\",\n"
+                + "  \"id\": 1,\n"
+                + "  \"email\": \"test@email.com\",\n"
+                + "  \"birthday\": \"1977-07-07\"\n"
+                + "}";
         HttpRequest initialRequest = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -96,15 +91,13 @@ public class UserControllerTest {
 
     @Test
     public void testCreateUserWithInvalidEmail() throws Exception {
-        String userWithInvalidEmail = """
-                {
-                    "login": "testLogin",
-                    "name": "Test User",
-                    "id": 2,
-                    "email": "invalidEmail",
-                    "birthday": "1977-07-07"
-                }
-                """;
+        String userWithInvalidEmail = "{\n"
+                + "  \"login\": \"testLogin\",\n"
+                + "  \"name\": \"Test User\",\n"
+                + "  \"id\": 2,\n"
+                + "  \"email\": \"invalidEmail\",\n"
+                + "  \"birthday\": \"1977-07-07\"\n"
+                + "}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -117,15 +110,13 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUser() throws Exception {
-        String validUser = """
-                {
-                    "login": "testLogin",
-                    "name": "Test User",
-                    "id": 1,
-                    "email": "test@email.com",
-                    "birthday": "1977-07-07"
-                }
-                """;
+        String validUser = "{\n"
+                + "  \"login\": \"testLogin\",\n"
+                + "  \"name\": \"Test User\",\n"
+                + "  \"id\": 1,\n"
+                + "  \"email\": \"test@email.com\",\n"
+                + "  \"birthday\": \"1977-07-07\"\n"
+                + "}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -133,15 +124,13 @@ public class UserControllerTest {
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        String updatedUser = """
-                {
-                    "login": "updatedLogin",
-                    "name": "Updated User",
-                    "id": 1,
-                    "email": "update@test.com",
-                    "birthday": "1980-01-01"
-                }
-                """;
+        String updatedUser = "{\n"
+                + "  \"login\": \"updatedLogin\",\n"
+                + "  \"name\": \"Updated User\",\n"
+                + "  \"id\": 1,\n"
+                + "  \"email\": \"update@test.com\",\n"
+                + "  \"birthday\": \"1980-01-01\"\n"
+                + "}";
         HttpRequest request1 = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -154,15 +143,13 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateNonExistingUser() throws Exception {
-        String nonExistingUserUpdate = """
-                {
-                    "login": "ghostUser",
-                    "name": "Ghost User",
-                    "id": 999,
-                    "email": "ghost@test.com",
-                    "birthday": "1990-01-01"
-                }
-                """;
+        String nonExistingUserUpdate = "{\n"
+                + "  \"login\": \"ghostUser\",\n"
+                + "  \"name\": \"Ghost User\",\n"
+                + "  \"id\": 999,\n"
+                + "  \"email\": \"ghost@test.com\",\n"
+                + "  \"birthday\": \"1990-01-01\"\n"
+                + "}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL + "/999"))
                 .header("Content-Type", "application/json")
@@ -175,15 +162,13 @@ public class UserControllerTest {
 
     @Test
     public void testGetAllUsers() throws Exception {
-        String validUser = """
-                {
-                    "login": "testLogin",
-                    "name": "Test User",
-                    "id": 1,
-                    "email": "test@email.com",
-                    "birthday": "1977-07-07"
-                }
-                """;
+        String validUser = "{\n"
+                + "  \"login\": \"testLogin\",\n"
+                + "  \"name\": \"Test User\",\n"
+                + "  \"id\": 1,\n"
+                + "  \"email\": \"test@email.com\",\n"
+                + "  \"birthday\": \"1977-07-07\"\n"
+                + "}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
