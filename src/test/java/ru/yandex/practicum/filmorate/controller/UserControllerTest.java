@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class UserControllerTest {
     private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final String URL = "http://localhost:8080/filmorate/users";
+    private final String url = "http://localhost:8080/filmorate/users";
 
     @Test
     public void testCreateValidUser() throws Exception {
@@ -24,7 +24,7 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1977-07-07\"\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validUser))
                 .build();
@@ -42,7 +42,7 @@ public class UserControllerTest {
                 + "  \"birthday\": \"\"\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(invalidUser))
                 .build();
@@ -61,14 +61,14 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1977-07-07\"\n"
                 + "}";
         HttpRequest initialRequest = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validUser))
                 .build();
         httpClient.send(initialRequest, HttpResponse.BodyHandlers.ofString());
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validUser))
                 .build();
@@ -80,7 +80,7 @@ public class UserControllerTest {
     @Test
     public void testCreateUserWithEmptyBody() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
@@ -99,7 +99,7 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1977-07-07\"\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(userWithInvalidEmail))
                 .build();
@@ -118,7 +118,7 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1977-07-07\"\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validUser))
                 .build();
@@ -132,7 +132,7 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1980-01-01\"\n"
                 + "}";
         HttpRequest request1 = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(updatedUser))
                 .build();
@@ -151,7 +151,7 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1990-01-01\"\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL + "/999"))
+                .uri(new URI(url + "/999"))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(nonExistingUserUpdate))
                 .build();
@@ -170,13 +170,13 @@ public class UserControllerTest {
                 + "  \"birthday\": \"1977-07-07\"\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validUser))
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         HttpRequest request1 = HttpRequest.newBuilder()
-                .uri(new URI(URL))
+                .uri(new URI(url))
                 .GET()
                 .build();
 
