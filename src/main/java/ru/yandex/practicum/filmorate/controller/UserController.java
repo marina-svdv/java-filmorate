@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/filmorate/users")
@@ -18,8 +21,8 @@ public class UserController {
     private final ValidationService validationService = new ValidationService();
 
     @GetMapping()
-    public ResponseEntity<HashMap<Integer, User>> getAllUsers() {
-        HashMap<Integer, User> allUsers = validationService.getUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> allUsers = new ArrayList<User>(validationService.getUsers().values());
         if (allUsers.isEmpty()) {
             return new ResponseEntity<>(allUsers, HttpStatus.NO_CONTENT);
         }
@@ -34,6 +37,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             validationService.validateUser(user);
+            user.assignId();
             validationService.getUsers().put(user.getId(), user);
             log.info("User with ID {} has been created.", user.getId());
             return new ResponseEntity<>(user, HttpStatus.CREATED);

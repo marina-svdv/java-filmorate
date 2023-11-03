@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 public class Film {
     private static int COUNTER = 1;
 
@@ -15,7 +17,7 @@ public class Film {
     private int duration;
     private int rate;
 
-    public Film() {
+    public void assignId() {
         if (id == 0) {
             id = COUNTER++;
         }

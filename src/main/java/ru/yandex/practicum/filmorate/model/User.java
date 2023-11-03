@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 public class User {
     private static int COUNTER = 1;
 
@@ -12,9 +14,9 @@ public class User {
     private String email;
     private String login;
     private String name;
-    LocalDate birthday;
+    private LocalDate birthday;
 
-    public User() {
+    public void assignId() {
         if (id == 0) {
             id = COUNTER++;
         }

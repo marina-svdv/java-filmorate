@@ -9,7 +9,9 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/filmorate/films")
@@ -18,10 +20,10 @@ public class FilmController {
     private final ValidationService validationService = new ValidationService();
 
     @GetMapping()
-    public ResponseEntity<HashMap<Integer, Film>> getAllFilms() {
-        HashMap<Integer, Film> allFilms = validationService.getFilms();
+    public ResponseEntity<List<Film>> getAllFilms() {
+        List<Film> allFilms = new ArrayList<Film>(validationService.getFilms().values());
         if (allFilms.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(allFilms, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(allFilms, HttpStatus.OK);
     }
@@ -34,6 +36,7 @@ public class FilmController {
                 return new ResponseEntity<>(film, HttpStatus.CONFLICT);
             }
             validationService.validateFilm(film);
+            film.assignId();
             validationService.getFilms().put(film.getId(), film);
             log.info("Film with ID {} has been created.", film.getId());
             return new ResponseEntity<>(film, HttpStatus.CREATED);
