@@ -11,6 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 public class UserControllerTest {
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -19,13 +20,13 @@ public class UserControllerTest {
     @Test
     public void testCreateValidUser() throws Exception {
         String validUser = """
-            {
-                "login": "testLogin",
-                "name": "Test User",
-                "email": "test@email.com",
-                "birthday": "1977-07-07"
-            }
-            """;
+                {
+                    "login": "testLogin",
+                    "name": "Test User",
+                    "email": "test@email.com",
+                    "birthday": "1977-07-07"
+                }
+                """;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -56,14 +57,14 @@ public class UserControllerTest {
     @Test
     public void testCreateUserWithExistingId() throws Exception {
         String validUser = """
-            {
-                "login": "testLogin",
-                "name": "Test User",
-                "id": 1,
-                "email": "test@email.com",
-                "birthday": "1977-07-07"
-            }
-            """;
+                {
+                    "login": "testLogin",
+                    "name": "Test User",
+                    "id": 1,
+                    "email": "test@email.com",
+                    "birthday": "1977-07-07"
+                }
+                """;
         HttpRequest initialRequest = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -117,14 +118,14 @@ public class UserControllerTest {
     @Test
     public void testUpdateUser() throws Exception {
         String validUser = """
-            {
-                "login": "testLogin",
-                "name": "Test User",
-                "id": 1,
-                "email": "test@email.com",
-                "birthday": "1977-07-07"
-            }
-            """;
+                {
+                    "login": "testLogin",
+                    "name": "Test User",
+                    "id": 1,
+                    "email": "test@email.com",
+                    "birthday": "1977-07-07"
+                }
+                """;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")
@@ -171,17 +172,18 @@ public class UserControllerTest {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(404, response.statusCode());
     }
+
     @Test
     public void testGetAllUsers() throws Exception {
         String validUser = """
-            {
-                "login": "testLogin",
-                "name": "Test User",
-                "id": 1,
-                "email": "test@email.com",
-                "birthday": "1977-07-07"
-            }
-            """;
+                {
+                    "login": "testLogin",
+                    "name": "Test User",
+                    "id": 1,
+                    "email": "test@email.com",
+                    "birthday": "1977-07-07"
+                }
+                """;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL))
                 .header("Content-Type", "application/json")

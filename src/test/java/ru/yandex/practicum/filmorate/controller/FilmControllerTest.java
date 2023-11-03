@@ -9,6 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 public class FilmControllerTest {
     private final HttpClient httpClient = HttpClient.newHttpClient();
