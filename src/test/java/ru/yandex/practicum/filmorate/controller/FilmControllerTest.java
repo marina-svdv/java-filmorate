@@ -1,7 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,10 +14,20 @@ import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FilmControllerTest {
     private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final String url = "http://localhost:8080/filmorate/films";
+
+    @LocalServerPort
+    private int port;
+
+    private String baseUrl;
+
+    @BeforeEach
+    public void setUp() {
+        baseUrl = "http://localhost:" + port;
+    }
 
     @Test
     public void testCreateValidFilm() throws Exception {
@@ -24,7 +38,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
@@ -42,7 +56,7 @@ public class FilmControllerTest {
                 + "  \"duration\": -120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(invalidFilm))
                 .build();
@@ -61,14 +75,14 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest initialRequest = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
         httpClient.send(initialRequest, HttpResponse.BodyHandlers.ofString());
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
@@ -86,7 +100,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(validFilm))
                 .build();
@@ -100,7 +114,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 110\n"
                 + "}";
         HttpRequest request1 = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(updatedFilm))
                 .build();
@@ -119,7 +133,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(nonExistingFilm))
                 .build();
@@ -131,7 +145,7 @@ public class FilmControllerTest {
     @Test
     public void testCreateFilmWithEmptyBody() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
@@ -149,7 +163,7 @@ public class FilmControllerTest {
                 + "  \"duration\": 120\n"
                 + "}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(filmWithInvalidName))
                 .build();
@@ -161,7 +175,7 @@ public class FilmControllerTest {
     @Test
     public void testGetAllFilms() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(url))
+                .uri(new URI(baseUrl + "/filmorate/films"))
                 .GET()
                 .build();
 

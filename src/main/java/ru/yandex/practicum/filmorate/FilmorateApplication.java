@@ -12,5 +12,4 @@ public class FilmorateApplication {
     public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
         SpringApplication.run(FilmorateApplication.class, args);
     }
-
 }
