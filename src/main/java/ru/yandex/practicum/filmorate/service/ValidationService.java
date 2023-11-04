@@ -1,38 +1,28 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.exception.ValidationNameException;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 
+@Service
 public class ValidationService {
-    private final HashMap<Integer, Film> films = new HashMap<>();
-    private final HashMap<Integer, User> users = new HashMap<>();
 
-    public HashMap<Integer, Film> getFilms() {
-        return films;
-    }
-
-    public HashMap<Integer, User> getUsers() {
-        return users;
-    }
-
-    public void validateUser(User user) throws ValidationException {
+    public void validateUser(User user) throws ValidationException, ValidationNameException {
         if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
             throw new ValidationException("The email is entered incorrectly.");
         }
         if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             throw new ValidationException("The login is entered incorrectly.");
         }
-        if (user.getName() == null || user.getName().isBlank()) {
-            if (users.containsValue(user)) {
-                throw new ValidationException("The user with the same login and name already exists.");
-            }
-            user.setName(user.getLogin());
-        }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("The date of birth is entered incorrectly.");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            throw new ValidationNameException();
         }
     }
 
