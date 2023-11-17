@@ -33,8 +33,8 @@ public class FilmService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Film with given ID already exists");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST
-                    , "The release date cannot be earlier than December 28, 1895.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The release date cannot be earlier than December 28, 1895.");
         }
         Film createdFilm = filmStorage.create(film);
         log.info("Film with ID {} has been created.", film.getId());
@@ -60,8 +60,8 @@ public class FilmService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film not found");
         }
         if (newFilm.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST
-                    , "The release date cannot be earlier than December 28, 1895.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The release date cannot be earlier than December 28, 1895.");
         }
         updatedFilm = filmStorage.update(newFilm.getId(), newFilm);
         log.info("Film with ID {} has been updated.", newFilm.getId());
