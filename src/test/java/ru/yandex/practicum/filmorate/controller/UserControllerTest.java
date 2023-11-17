@@ -44,7 +44,7 @@ public class UserControllerTest {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(201, response.statusCode());
+        assertEquals(200, response.statusCode());
     }
 
     @Test
