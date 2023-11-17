@@ -19,8 +19,8 @@ public class NewExceptionHandler {
     public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException e, WebRequest request) {
         log.error("ResponseStatusException: {}", e.getMessage(), e);
 
-        ErrorResponse errorResponse = new ErrorResponse(e.getStatus().value(), e.getReason()
-                , request.getDescription(false));
+        ErrorResponse errorResponse = new ErrorResponse(e.getStatus().value(), e.getReason(),
+                request.getDescription(false));
         return new ResponseEntity<>(errorResponse, e.getStatus());
     }
 
