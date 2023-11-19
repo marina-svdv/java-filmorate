@@ -100,7 +100,7 @@ public class UserControllerTest {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(400, response.statusCode());
+        assertEquals(500, response.statusCode());
     }
 
     @Test

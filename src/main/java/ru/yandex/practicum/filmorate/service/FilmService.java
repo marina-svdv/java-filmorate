@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +20,12 @@ import java.util.stream.Collectors;
 public class FilmService {
 
     private final FilmStorage filmStorage;
+    private final UserService userService;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage) {
+    public FilmService(FilmStorage filmStorage, UserService userService) {
         this.filmStorage = filmStorage;
+        this.userService = userService;
     }
 
     public Film createFilm(Film film) {
@@ -49,12 +50,11 @@ public class FilmService {
         return film;
     }
 
-    public Collection<Film> findAllFilms() {
+    public List<Film> findAllFilms() {
         return filmStorage.findAll();
     }
 
     public Film updateFilm(Film newFilm) {
-        Film updatedFilm;
         if (filmStorage.findById(newFilm.getId()) == null) {
             log.warn("Attempt to update a film with a non-existent ID: {}", newFilm.getId());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film not found");
@@ -63,7 +63,7 @@ public class FilmService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The release date cannot be earlier than December 28, 1895.");
         }
-        updatedFilm = filmStorage.update(newFilm.getId(), newFilm);
+        Film updatedFilm = filmStorage.update(newFilm.getId(), newFilm);
         log.info("Film with ID {} has been updated.", newFilm.getId());
         return updatedFilm;
     }
@@ -76,7 +76,9 @@ public class FilmService {
         return filmStorage.delete(id);
     }
 
-    public boolean addLike(Film film, User user) {
+    public boolean addLike(int id, int userId) {
+        User user = userService.findUserById(userId);
+        Film film = findFilmById(id);
         if (film == null || user == null) {
             log.warn("Attempt to contact a user or a film that does not exist");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or Film not found.");
@@ -86,14 +88,15 @@ public class FilmService {
             likes.add(user.getId());
             log.info("Like added for user {} to film {}", user.getId(), film.getId());
             filmStorage.update(film.getId(), film);
-            return true;
         } else {
             log.info("User {} already liked film {}", user.getId(), film.getId());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Like was already added.");
         }
+        return true;
     }
 
-    public boolean deleteLike(Film film, User user) {
+    public boolean deleteLike(int id, int userId) {
+        User user = userService.findUserById(userId);
+        Film film = findFilmById(id);
         if (film == null || user == null) {
             log.warn("Attempt to contact a user or a film that does not exist");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or Film not found.");
@@ -106,7 +109,7 @@ public class FilmService {
             return true;
         } else {
             log.info("User {} did not like the film {}", user.getId(), film.getId());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Like was already added.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Like was not deleted.");
         }
     }
 

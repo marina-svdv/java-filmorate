@@ -45,7 +45,7 @@ public class UserService {
         return user;
     }
 
-    public Collection<User> findAllUsers() {
+    public List<User> findAllUsers() {
         return userStorage.findAll();
     }
 

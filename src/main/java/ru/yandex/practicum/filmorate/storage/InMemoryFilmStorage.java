@@ -4,8 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -26,9 +27,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         return films.get(id);
     }
 
-    public Collection<Film> findAll() {
+    public List<Film> findAll() {
         log.info("Retrieving all films");
-        return films.values();
+        return new ArrayList<>(films.values());
     }
 
     public Film update(int id, Film newFilm) {

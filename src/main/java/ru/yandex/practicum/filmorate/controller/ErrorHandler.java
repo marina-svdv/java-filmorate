@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
-public class NewExceptionHandler {
+public class ErrorHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException e, WebRequest request) {
@@ -21,6 +21,7 @@ public class NewExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(e.getStatus().value(), e.getReason(),
                 request.getDescription(false));
+
         return new ResponseEntity<>(errorResponse, e.getStatus());
     }
 
@@ -39,6 +40,19 @@ public class NewExceptionHandler {
                 request.getDescription(false));
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Object> handleAllExceptions(Throwable e, WebRequest request) {
+        log.error("Throwable exception: {}", e.getMessage(), e);
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "An unexpected internal server error",
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private static class ErrorResponse {

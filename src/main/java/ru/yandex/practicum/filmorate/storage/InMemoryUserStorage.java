@@ -4,8 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -26,9 +27,9 @@ public class InMemoryUserStorage implements UserStorage {
         return users.get(id);
     }
 
-    public Collection<User> findAll() {
+    public List<User> findAll() {
         log.info("Retrieving all users");
-        return users.values();
+        return new ArrayList<>(users.values());
     }
 
     public User update(int id, User newUser) {
