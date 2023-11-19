@@ -1,90 +1,69 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.exception.ValidationNameException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.UserRepository;
-import ru.yandex.practicum.filmorate.service.ValidationService;
+import ru.yandex.practicum.filmorate.service.UserService;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserRepository userRepository;
-    private final ValidationService validationService;
+
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository, ValidationService validationService) {
-        this.userRepository = userRepository;
-        this.validationService = validationService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> allUsers = new ArrayList<User>(userRepository.findAll());
-        if (allUsers.isEmpty()) {
-            return new ResponseEntity<>(allUsers, HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    @GetMapping
+    public List<User> getAllUsers() {
+        return new ArrayList<>(userService.findAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable int id) {
+        return userService.findUserById(id);
     }
 
     @PostMapping()
-    public ResponseEntity<User> create(@RequestBody User user) {
-        try {
-            if (userRepository.findById(user.getId()) != null) {
-                log.warn("Attempt to create user with an existing ID: {}", user.getId());
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
-            validationService.validateUser(user);
-            userRepository.create(user);
-            log.info("User with ID {} has been created.", user.getId());
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            log.error("User creation validation failed: {}", e.getMessage());
-            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
-        } catch (ValidationNameException e) {
-            return handleValidationNameException(user, true);
-        }
+    public User createUser(@Valid @RequestBody User user) {
+        return userService.createUser(user);
     }
 
     @PutMapping()
-    public ResponseEntity<User> update(@RequestBody User user) {
-        try {
-            if (userRepository.findById(user.getId()) == null) {
-                log.warn("Attempt to update user with a non-existent ID: {}", user.getId());
-                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
-            }
-            validationService.validateUser(user);
-            userRepository.update(user.getId(), user);
-            log.info("User with ID {} has been updated.", user.getId());
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ValidationException e) {
-            log.error("User update validation failed: {}", e.getMessage());
-            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
-        } catch (ValidationNameException e) {
-            return handleValidationNameException(user, false);
-        }
+    public User updateUser(@Valid @RequestBody User user) {
+        return userService.updateUser(user);
     }
 
-    private ResponseEntity<User> handleValidationNameException(User user, boolean isNew) {
-        if (isNew) {
-            user.setName(user.getLogin());
-            userRepository.create(user);
-            log.info("User with ID {} has been created with login as name.", user.getId());
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        } else {
-            user.setName(userRepository.findById(user.getId()).getName());
-            userRepository.update(user.getId(), user);
-            log.info("User with ID {} has been updated.", user.getId());
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
+    @PutMapping("/{id}/friends/{friendId}")
+    public boolean addFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public boolean deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable int id) {
+        return userService.findFriends(id);
+
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Set<User> getMutualFriends(@PathVariable int id, @PathVariable int otherId) {
+        return userService.findMutualFriends(id, otherId);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteUser(@PathVariable int id) {
+        return userService.deleteUser(id);
     }
 }
