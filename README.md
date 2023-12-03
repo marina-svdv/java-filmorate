@@ -28,4 +28,4 @@ WHERE f1.user_id = 1 AND f1.status = 'CONFIRMED'
 SELECT g.genre
 FROM genre AS g
 JOIN film_genre fg ON g.genre_id = fg.genre_id
-WHERE fg.film_id = 1;
+WHERE fg.film_id = 1; 
