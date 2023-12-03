@@ -31,5 +31,5 @@ public class User {
     @Past(message = "Birthday must be in the past")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthday;
-    private final Set<Integer> friends = new HashSet<>();
+    private Set<Friendship> friendships = new HashSet<>();
 }
