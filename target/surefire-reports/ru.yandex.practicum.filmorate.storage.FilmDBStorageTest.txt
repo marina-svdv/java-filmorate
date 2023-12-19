@@ -1,0 +1,27 @@
+-------------------------------------------------------------------------------
+Test set: ru.yandex.practicum.filmorate.storage.FilmDBStorageTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.564 s <<< FAILURE! - in ru.yandex.practicum.filmorate.storage.FilmDBStorageTest
+testCreateAndGetValidFilm  Time elapsed: 0.08 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting actual:
+  Film(id=5, name=Home Alone, description=A family comedy without the family., releaseDate=1990-11-10, duration=103, mpa=Mpa(id=2, name=PG), likes=[], genres=[Genre(id=1, name=РљРѕРјРµРґРёСЏ)])
+to be equal to:
+  Film(id=5, name=Home Alone, description=A family comedy without the family., releaseDate=1990-11-10, duration=103, mpa=Mpa(id=2, name=PG), likes=[], genres=[Genre(id=1, name=Комедия)])
+when recursively comparing field by field, but found the following difference:
+
+field/property 'genres[0].name' differ:
+- actual value  : "РљРѕРјРµРґРёСЏ"
+- expected value: "Комедия"
+
+The recursive comparison was performed with this configuration:
+- no overridden equals methods were used in the comparison (except for java types)
+- these types were compared with the following comparators:
+  - java.lang.Double -> DoubleComparator[precision=1.0E-15]
+  - java.lang.Float -> FloatComparator[precision=1.0E-6]
+  - java.nio.file.Path -> lexicographic comparator (Path natural order)
+- actual and expected objects and their fields were compared field by field recursively even if they were not of the same type, this allows for example to compare a Person to a PersonDto (call strictTypeChecking(true) to change that behavior).
+
+	at ru.yandex.practicum.filmorate.storage.FilmDBStorageTest.testCreateAndGetValidFilm(FilmDBStorageTest.java:56)
+
