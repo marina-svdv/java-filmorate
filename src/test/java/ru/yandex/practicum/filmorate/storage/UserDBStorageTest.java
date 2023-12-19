@@ -58,7 +58,7 @@ public class UserDBStorageTest {
         user1.setBirthday(LocalDate.of(1968, 1, 1));
         int userId1 = userDbStorage.create(user1).getId();
 
-        User user2 =new User();
+        User user2 = new User();
         user2.setEmail("vanillabear.dorian@sacredheart.com");
         user2.setLogin("J.D.");
         user2.setName("John Dorian");
