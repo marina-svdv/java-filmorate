@@ -1,31 +1,25 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.model.Friendship;
-import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserStorage userStorage;
 
-    @Autowired
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
-
     public User createUser(User user) {
-        if (userStorage.findById(user.getId()) != null) {
+        if (user.getId() != null) {
             log.warn("Attempt to create user with an existing ID: {}", user.getId());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User with given ID already exists");
         }
@@ -84,29 +78,8 @@ public class UserService {
             log.warn("Attempt to add a friend that does not exist: User ID {}, Friend ID {}", id, friendId);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or Friend not found");
         }
-
-        // Отправил ли друг запрос на дружбу
-        Friendship friendToUserFriendship = friend.getFriendships().stream()
-                .filter(f -> f.getFriendId() == id)
-                .findFirst()
-                .orElse(null);
-
-        // Отправил ли пользователь запрос на дружбу
-        Friendship userToFriendFriendship = user.getFriendships().stream()
-                .filter(f -> f.getFriendId() == friendId)
-                .findFirst()
-                .orElse(null);
-
-        if (friendToUserFriendship != null && friendToUserFriendship.getStatus() == FriendshipStatus.UNCONFIRMED) {
-            friendToUserFriendship.setStatus(FriendshipStatus.CONFIRMED);
-            user.getFriendships().add(friendToUserFriendship);
-            return true;
-        } else if (userToFriendFriendship == null) {
-            Friendship newFriendship = new Friendship(id, friendId, FriendshipStatus.UNCONFIRMED);
-            user.getFriendships().add(newFriendship);
-            return true;
-        }
-        return false;
+        user.getFriends().add(friendId);
+        return userStorage.update(id, user) != null;
     }
 
     public boolean deleteFriend(int id, int friendId) {
@@ -117,11 +90,8 @@ public class UserService {
             log.warn("Attempt to delete a friend that does not exist: User ID {}, Friend ID {}", id, friendId);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or Friend not found");
         }
-
-        boolean isFriendDeletedFromUser = user.getFriendships().removeIf(f -> f.getFriendId() == friendId);
-        boolean isFriendDeletedFromFriend = friend.getFriendships().removeIf(f -> f.getFriendId() == id);
-
-        return isFriendDeletedFromUser && isFriendDeletedFromFriend;
+        user.getFriends().remove(friendId);
+        return userStorage.update(id, user) != null;
     }
 
     public List<User> findFriends(int id) {
@@ -131,9 +101,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        return user.getFriendships().stream()
-                .filter(f -> f.getStatus() == FriendshipStatus.CONFIRMED)
-                .map(Friendship::getFriendId)
+        return user.getFriends().stream()
                 .map(userStorage::findById)
                 .filter(Objects::nonNull)
                 .sorted(Comparator.comparingInt(User::getId))
@@ -149,19 +117,10 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or OtherUser not found");
         }
 
-        Set<Integer> userFriends = user.getFriendships().stream()
-                .filter(f -> f.getStatus() == FriendshipStatus.CONFIRMED)
-                .map(Friendship::getFriendId)
-                .collect(Collectors.toSet());
+        Set<Integer> mutualFriends = new HashSet<>(user.getFriends());
+        mutualFriends.retainAll(otherUser.getFriends());
 
-        Set<Integer> otherUserFriends = otherUser.getFriendships().stream()
-                .filter(f -> f.getStatus() == FriendshipStatus.CONFIRMED)
-                .map(Friendship::getFriendId)
-                .collect(Collectors.toSet());
-
-        userFriends.retainAll(otherUserFriends);
-
-        return userFriends.stream()
+        return mutualFriends.stream()
                 .map(userStorage::findById)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
