@@ -134,7 +134,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     private void saveFriends(int userId, Set<Integer> friends) {
-        if(friends.size() > 0) {
+        if (friends.size() > 0) {
             for (Integer id : friends) {
                 String sql = "INSERT INTO friendships (user_id, friend_id) VALUES (?, ?) ";
                 jdbcTemplate.update(sql, userId, id);
