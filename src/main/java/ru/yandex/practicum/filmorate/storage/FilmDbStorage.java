@@ -49,7 +49,6 @@ public class FilmDbStorage implements FilmStorage {
                     .collect(Collectors.toList());
             saveGenres(film.getId(), sortedGenres);
         }
-
         if (film.getLikes() != null && !film.getLikes().isEmpty()) {
             saveLikes(film.getId(), film.getLikes());
         }
@@ -121,7 +120,6 @@ public class FilmDbStorage implements FilmStorage {
                     likes.add(userIdLike);
                 }
             }
-
             if (film != null) {
                 film.setGenres(genres);
                 film.setLikes(likes);
@@ -156,31 +154,27 @@ public class FilmDbStorage implements FilmStorage {
                         throw new RuntimeException(e);
                     }
                 });
-
                 assert film != null;
                 Set<Genre> uniqueGenres = new HashSet<>(film.getGenres());
-
                 int genreId = rs.getInt("genre_id");
                 if (genreId != 0) {
                     Genre genre = new Genre();
                     genre.setId(genreId);
                     genre.setName(rs.getString("genre_name"));
-                    uniqueGenres.add(genre); // Добавляем новый жанр, если он не дублируется
+                    uniqueGenres.add(genre);
                 }
-
                 film.setGenres(new ArrayList<>(uniqueGenres));
-
                 int userIdLike = rs.getInt("user_id_like");
                 if (userIdLike != 0) {
                     film.getLikes().add(userIdLike);
                 }
             }
-
             filmMap.values().forEach(film -> {
                 film.getGenres().sort(Comparator.comparingInt(Genre::getId));
             });
-
-            return new ArrayList<>(filmMap.values());
+            List<Film> sortedFilms = new ArrayList<>(filmMap.values());
+            sortedFilms.sort(Comparator.comparingInt(Film::getId));
+            return sortedFilms;
         });
     }
 

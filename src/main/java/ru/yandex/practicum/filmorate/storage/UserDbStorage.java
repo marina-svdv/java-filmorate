@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 @Repository
@@ -67,24 +68,26 @@ public class UserDbStorage implements UserStorage {
         String sql = "SELECT u.*, f.friend_id " +
                 "FROM users AS u " +
                 "LEFT JOIN friendships AS f ON u.id = f.user_id";
-
         return jdbcTemplate.query(sql, rs -> {
             Map<Integer, User> userMap = new HashMap<>();
-
             while (rs.next()) {
                 int userId = rs.getInt("id");
-                if (!userMap.containsKey(userId)) {
-                    User user = getUserMapper().mapRow(rs, rs.getRow());
-                    userMap.put(userId, user);
-                }
-
+                userMap.computeIfAbsent(userId, id -> {
+                    try {
+                        return getUserMapper().mapRow(rs, rs.getRow());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                 User user = userMap.get(userId);
                 int friendId = rs.getInt("friend_id");
                 if (friendId != 0) {
                     user.getFriends().add(friendId);
                 }
             }
-            return new ArrayList<>(userMap.values());
+            List<User> sortedUsers = new ArrayList<>(userMap.values());
+            sortedUsers.sort(Comparator.comparingInt(User::getId));
+            return sortedUsers;
         });
     }
 
