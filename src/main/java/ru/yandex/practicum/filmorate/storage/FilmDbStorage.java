@@ -201,7 +201,7 @@ public class FilmDbStorage implements FilmStorage {
            film.setDuration(rs.getInt("duration"));
 
            Mpa mpa = new Mpa();
-           if(rs.getInt("mpa_id" ) != 0) {
+           if (rs.getInt("mpa_id") != 0) {
               mpa.setId(rs.getInt("mpa_id"));
               mpa.setName(rs.getString("mpa_name"));
            }
@@ -231,7 +231,7 @@ public class FilmDbStorage implements FilmStorage {
         List<Genre> sortedGenres = new ArrayList<>(uniqueGenres);
         sortedGenres.sort(Comparator.comparingInt(Genre::getId));
 
-        if(sortedGenres.size() > 0) {
+        if (sortedGenres.size() > 0) {
             for (Genre genre : genres) {
                 String sql = "INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?) ";
                 jdbcTemplate.update(sql, filmId, genre.getId());
@@ -248,10 +248,10 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private void saveLikes(int filmId, Set<Integer> likes) {
-        if(likes.size() > 0) {
-            for (Integer user_id_like : likes) {
+        if (likes.size() > 0) {
+            for (Integer userIdLike : likes) {
                 String sql = "INSERT INTO likes (user_id, film_id) VALUES (?, ?) ";
-                jdbcTemplate.update(sql, user_id_like, filmId);
+                jdbcTemplate.update(sql, userIdLike, filmId);
             }
         }
     }
