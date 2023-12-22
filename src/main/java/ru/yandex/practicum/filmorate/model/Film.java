@@ -9,29 +9,25 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class Film {
-
-    private int id;
-
+    private Integer id;
     @NotBlank(message = "Name must not be blank")
     private String name;
-
     @Size(max = 200, message = "Description must be less than 200 characters")
     private String description;
-
     @PastOrPresent(message = "Release date must be in the past or present")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate releaseDate;
-
     @Positive(message = "Duration must be positive")
     private int duration;
-    private int rate;
-    private final Set<Integer> likes = new HashSet<>();
-    private Set<Genre> genres = new HashSet<>();
-    private MpaRating mpaRating;
+    private Mpa mpa;
+    private Set<Integer> likes = new HashSet<>();
+    private List<Genre> genres = new ArrayList<>();
 }

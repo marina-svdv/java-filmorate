@@ -127,7 +127,6 @@ public class UserControllerTest {
         String validUser = "{\n"
                 + "  \"login\": \"testLogin\",\n"
                 + "  \"name\": \"Test User\",\n"
-                + "  \"id\": 1,\n"
                 + "  \"email\": \"test@email.com\",\n"
                 + "  \"birthday\": \"1977-07-07\"\n"
                 + "}";
